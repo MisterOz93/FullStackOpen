@@ -1,1 +1,5 @@
 
+title new note 2
+user -> browser: user enters data into web form on browser.
+browser -> server: JSON data containing user input is submitted as POST request.
+server -> browser: server creates a new note without requesting a redirect.
