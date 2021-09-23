@@ -1,1 +1,7 @@
 
+title new note
+user -> browser: user enters data into web form on browser.
+browser -> server: web form is submitted as POST request.
+server -> browser: server creates a new note and responds by telling browser to submit a new GET request.
+browser -> server: browser reloads the page and performs a GET request for the other necessary files. 
+browser -> user: browser displays the updated webpage for the user.
