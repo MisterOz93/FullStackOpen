@@ -19,33 +19,40 @@ const Content = (props) => {
 
 const Total = (props) => {
   const array = props.parts
-  return( //again, should loop here.
+  let total = 0;
+  array.forEach(element => {
+    total += element.exercises;
+  });
+  return(
     <div>
-    Number of exercises {array[0].exercises + array[1].exercises + array[2].exercises}
+    Number of exercises {total}
     </div>
   )
 }
 
 const App = () => {
-  const course = 'Half Stack application development'
-  const parts = [ {
-      name: 'Fundamentals of React',
-      exercises: 10
-    },
-    {
-      name: 'Using props to pass data',
-      exercises: 7
-    },
-    {
-      name: 'State of a component',
-      exercises: 14
-    }
-]
+  const course = { 
+    name: 'Half Stack application development',
+    parts: [ 
+      {
+        name: 'Fundamentals of React',
+        exercises: 10
+      },
+      {
+        name: 'Using props to pass data',
+        exercises: 7
+      },
+      {
+        name: 'State of a component',
+        exercises: 14
+      }
+   ]
+  }
   return (
     <div>
-    <Header course={course} /> 
-    <Content parts={parts}/>
-    <Total parts={parts}/>
+    <Header course={course.name} /> 
+    <Content parts={course.parts}/>
+    <Total parts={course.parts}/>
     </div>
   );
 }
