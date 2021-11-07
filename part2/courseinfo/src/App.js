@@ -2,10 +2,13 @@ import React from 'react';
 //import ReactDOM from 'react-dom';
 
 const Course = ({course}) => {
+  const total = course.parts.reduce(function (sum, part){return sum + part.exercises}, 0)
   return(
     <>
     <h1>{course.name}</h1>
     {course.parts.map(part => <p key={part.id}>{part.name} {part.exercises}</p> )}
+    <p><strong>Total of {total} exercises</strong></p>
+
     </>
   )
 }
@@ -30,6 +33,11 @@ const App = () => {
         exercises: 14,
         id: 3
       },
+      {
+        name: 'Redux',
+        exercises: 11,
+        id: 4
+      }
     ]
   }
 
