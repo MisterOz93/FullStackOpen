@@ -1,5 +1,35 @@
 import React, { useState } from 'react'
 
+const Filter = ( {search, onChange}) => {
+
+  return(
+    <form>
+        Show only names containing <input value={search} onChange={onChange}/>
+    </form>
+  )
+
+
+}
+
+const PersonForm = (props) => {
+  return (
+   <form onSubmit={props.handleSubmit}>
+    <p>name: <input value={props.name} onChange={props.nameChange}></input></p>
+    <p>number:<input value={props.number} onChange={props.numberChange}></input></p>
+    <button type="submit">add</button>
+    </form>
+  )
+}
+
+const Persons = ({filteredPersons}) => {
+  return(
+    <ul> 
+    {filteredPersons.map(person => <li key={person.name}>{(person.name)} {person.number}</li>)}
+  </ul>
+  )
+
+}
+
 const App = () => {
   const [ persons, setPersons ] = useState([
     { name: 'Arto Hellas', number: '040-123456'},
@@ -29,15 +59,13 @@ const App = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
+    if (newName === ''){ return}
     const newPerson = {
       name: newName,
       number: newNumber
     }
     if (persons.map(person => person.name).includes(newName)){
       alert(`${newName} is already in the phonebook.`)
-    }
-    else if(persons.map(person => person.number).includes(newNumber)){
-      alert(`${newNumber} is already registered in the phonebook.`)
     }
     else {
       setPersons(persons.concat(newPerson))
@@ -48,24 +76,12 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      <form>
-        Show only names containing <input value={search} onChange={changeSearch}/>
-        </form>
+      <Filter search={search} onChange={changeSearch}/>
       <h2>Add a new: </h2>
-      <form onSubmit={handleSubmit}>
-        <div>
-          name: <input value={newName} onChange={changeName}/> </div>
-        <div>
-          number: <input value={newNumber} onChange={changeNumber}/>
-        </div>
-        <div>
-          <button type="submit">add</button>
-        </div>
-      </form>
+      <PersonForm handleSubmit ={handleSubmit} name={newName} nameChange={changeName} 
+        number = {newNumber} numberChange={changeNumber}/>
       <h2>Numbers</h2>
-      <ul> 
-        {filteredPersons.map(person => <li key={person.name}>{(person.name)} {person.number}</li>)}
-      </ul>
+     <Persons filteredPersons={filteredPersons}/>
     </div>
   )
 }
