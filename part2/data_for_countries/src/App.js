@@ -1,6 +1,41 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 
+const SingleCountry = ({country}) => {
+  return(
+    <div>
+      <h1>{country.name.common}</h1>
+      <p>Capital {country.capital}</p>
+      <p>Population (according to <a href='https://restcountries.com/#rest-countries'> REST Countries API</a>): {country.population}</p>
+      <h3>Languages:</h3>
+      <ul>
+      <p>{Object.values(country.languages).map(value => <li key={value}>{value}</li>)}</p>
+      </ul>
+      <p><img src={country.flags.png} alt={`the flag of ${country.name.common}`} height='100' width='250'></img></p>
+
+    </div>
+  )
+}
+
+const MultipleCountries = ({countries}) => {
+  const [currentCountries, setCountries] = useState(countries)
+  const handleClick = (country) => setCountries([country])
+  if (currentCountries.length === 1){
+    return(
+      <SingleCountry country={currentCountries[0]}/>
+    )
+  }
+   
+  return(
+    <div>
+
+      {currentCountries.map(country => (
+        <li key={country.name.common}>{country.name.common} <button onClick={()=>handleClick(country)} > Show</button></li> 
+      ))}
+    </div> 
+  )
+}
+
 const Display = ({query, items}) => {
   const filtered = items.filter(item => item.name.common.toLowerCase().includes(query))
   if (query === ''){
@@ -14,23 +49,11 @@ const Display = ({query, items}) => {
     )
     } else if (filtered.length > 1){
       return(
-        <p>{filtered.map(item => <li key={item.name.common}>{item.name.common}</li>)}</p>
+        <MultipleCountries countries={filtered}/>
       )
     } else if (filtered.length === 1) {
-      const country = filtered[0]
-      console.log(country)
       return(
-        <div>
-          <h1>{country.name.common}</h1>
-          <p>Capital {country.capital}</p>
-          <p>Population (according to <a href='https://restcountries.com/#rest-countries'> REST Countries API</a>): {country.population}</p>
-          <h3>Languages:</h3>
-          <ul>
-          <p>{Object.values(country.languages).map(value => <li key={value}>{value}</li>)}</p>
-          </ul>
-          <p><img src={country.flags.png} alt={`the flag of ${country.name.common}`} height='100' width='250'></img></p>
-
-        </div>
+        <SingleCountry country={filtered[0]}/>
       )
     }
   return(
