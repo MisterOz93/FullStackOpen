@@ -1,5 +1,31 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
+const api_key = process.env.REACT_APP_API_KEY
+
+const DisplayWeather = ({country}) => {
+  const [weatherData, setWeatherData] = useState([]);
+  const fetchWeather = () => {
+    axios.get("http://api.openweathermap.org/data/2.5/weather?q="+country.capital+"&appid="+api_key+"&units=metric")
+    .then(response => {setWeatherData(response.data)})
+  }
+  useEffect(fetchWeather, [country.capital]);
+  const currentWeather = weatherData;
+  const active = Object.keys(currentWeather).length > 0;
+  if (!active){
+    return(
+      <></>
+    )
+  }
+  return (
+    <div>
+      <h2>Weather in {currentWeather.name}:</h2>
+      <br/>
+      <p><strong>Temperature:</strong> {currentWeather.main.temp} Celsius</p>
+      <img src={"http://openweathermap.org/img/wn/"+currentWeather.weather[0].icon+"@2x.png"} alt="graphic showing the weather"/>
+      <p><strong>wind:</strong> {currentWeather.wind.speed} meters/second.</p>
+    </div> 
+  )
+}
 
 const SingleCountry = ({country}) => {
   return(
@@ -12,7 +38,7 @@ const SingleCountry = ({country}) => {
       <p>{Object.values(country.languages).map(value => <li key={value}>{value}</li>)}</p>
       </ul>
       <p><img src={country.flags.png} alt={`the flag of ${country.name.common}`} height='100' width='250'></img></p>
-
+      <DisplayWeather country={country} />
     </div>
   )
 }
