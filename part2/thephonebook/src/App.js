@@ -22,15 +22,6 @@ const PersonForm = (props) => {
   )
 }
 
-const Persons = ({filteredPersons}) => {
-  return(
-    <ul> 
-    {filteredPersons.map(person => <li key={person.id}>{(person.name)} {person.number}</li>)}
-  </ul>
-  )
-
-}
-
 const App = () => {
   const [ persons, setPersons ] = useState([]) 
   const [ newName, setNewName ] = useState('')
@@ -65,17 +56,21 @@ const App = () => {
     if (newName === ''){ return}
     const newPerson = {
       name: newName,
-      number: newNumber
+      number: newNumber,
+      //id: newName
     }
     if (persons.map(person => person.name).includes(newName)){
       alert(`${newName} is already in the phonebook.`)
     }
     else {
-      setPersons(persons.concat(newPerson))
-      setNewName('')
-      setNewNumber('')
-  }
-  }
+      axios.post('http://localhost:3001/persons', newPerson)
+      .then(response => { 
+        setPersons(persons.concat(response.data))
+        setNewName('')
+        setNewNumber('') 
+        //console.log(response)
+  })
+}}
   return (
     <div>
       <h2>Phonebook</h2>
@@ -84,7 +79,9 @@ const App = () => {
       <PersonForm handleSubmit ={handleSubmit} name={newName} nameChange={changeName} 
         number = {newNumber} numberChange={changeNumber}/>
       <h2>Numbers</h2>
-     <Persons filteredPersons={filteredPersons}/>
+      <ul> 
+        {filteredPersons.map(person => <li key={person.id}>{(person.name)} {person.number}</li>)}
+      </ul>
     </div>
   )
 }
