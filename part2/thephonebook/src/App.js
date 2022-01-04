@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
-import axios from 'axios'
+//import axios from 'axios'
+import serverCommunication from './components/serverCommunication'; 
 
 const Filter = ( {search, onChange}) => {
 
@@ -28,12 +29,11 @@ const App = () => {
   const [ newNumber, setNewNumber] = useState('')
   const [ search, setSearch] = useState('')
 
-  const fetchData = () => {
-    axios.get('http://localhost:3001/persons')
-      .then(response => {setPersons(response.data)})
-  }
-
-  useEffect(fetchData, [])
+  useEffect(() => {
+    serverCommunication.getPersons()
+    .then(data => {setPersons(data)
+    })
+  }, [])
 
   const changeName = (event) => {
     setNewName(event.target.value)
@@ -62,14 +62,11 @@ const App = () => {
     if (persons.map(person => person.name).includes(newName)){
       alert(`${newName} is already in the phonebook.`)
     }
-    else {
-      axios.post('http://localhost:3001/persons', newPerson)
-      .then(response => { 
-        setPersons(persons.concat(response.data))
-        setNewName('')
-        setNewNumber('') 
-        //console.log(response)
-  })
+    else {  
+      serverCommunication.createPerson(newPerson)
+      .then(data => setPersons(persons.concat(data)))
+      setNewName('');
+      setNewNumber('');
 }}
   return (
     <div>
