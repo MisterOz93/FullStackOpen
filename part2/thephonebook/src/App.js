@@ -29,10 +29,13 @@ const App = () => {
   const [ newNumber, setNewNumber] = useState('')
   const [ search, setSearch] = useState('')
 
-  useEffect(() => {
+  const getData = () => {
     serverCommunication.getPersons()
     .then(data => {setPersons(data)
     })
+  }
+  useEffect(() => {
+    getData()
   }, [])
 
   const changeName = (event) => {
@@ -68,6 +71,13 @@ const App = () => {
       setNewName('');
       setNewNumber('');
 }}
+const handleClick = (Person) => {
+  const result = window.confirm(`Are you sure you want to delete ${Person.name} ?`);
+  if (result) {
+  serverCommunication.removePerson(Person.id);
+  getData()}
+  
+}
   return (
     <div>
       <h2>Phonebook</h2>
@@ -77,7 +87,8 @@ const App = () => {
         number = {newNumber} numberChange={changeNumber}/>
       <h2>Numbers</h2>
       <ul> 
-        {filteredPersons.map(person => <li key={person.id}>{(person.name)} {person.number}</li>)}
+        {filteredPersons.map(person => <li key={person.id}>{(person.name)} {person.number} {" "}
+          <button onClick={ () => handleClick(person)}> delete </button></li>)}
       </ul>
     </div>
   )
