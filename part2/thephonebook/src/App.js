@@ -62,9 +62,21 @@ const App = () => {
       number: newNumber,
       //id: newName
     }
-    if (persons.map(person => person.name).includes(newName)){
-      alert(`${newName} is already in the phonebook.`)
-    }
+    //***//change logic here for next part****
+    if (persons.map(person => person.name).includes(newName)){ 
+      const person = persons.find(person => person.name === newName)
+      if (newNumber === person.number){
+        alert(`${newName} is already in the phonebook with that number.`)
+      } else { //person exists but number is different
+        const result = window.confirm(`${person.name} is already in the phonebook, replace the old number with a new one?`)
+        if (result){ 
+          const changedPerson = {...person, number: newNumber}
+          serverCommunication.updatePerson(person.id, changedPerson)
+          .then(response => {setPersons(persons.map(p => p.id !== person.id ? p : response))})
+
+        }
+      }
+  }
     else {  
       serverCommunication.createPerson(newPerson)
       .then(data => setPersons(persons.concat(data)))
