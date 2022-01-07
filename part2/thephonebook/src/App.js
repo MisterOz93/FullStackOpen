@@ -13,6 +13,16 @@ const Filter = ( {search, onChange}) => {
 
 }
 
+const Notification = ( {message} ) => {
+  if (message === null) {return null}
+  return (
+    <div className='notification'>
+      {message}
+    </div>
+  )
+
+}
+
 const PersonForm = (props) => {
   return (
    <form onSubmit={props.handleSubmit}>
@@ -28,6 +38,7 @@ const App = () => {
   const [ newName, setNewName ] = useState('')
   const [ newNumber, setNewNumber] = useState('')
   const [ search, setSearch] = useState('')
+  const [notification, setNotification] = useState(null)
 
   const getData = () => {
     serverCommunication.getPersons()
@@ -50,6 +61,13 @@ const App = () => {
     setSearch(event.target.value)
   }
 
+  const showNotification = (message) => {
+    setNotification(message)
+          setTimeout( () => {
+            setNotification(null)
+          }, 5000)
+  }
+
   const filteredPersons = search === ''
     ? persons 
     : persons.filter(person => person.name.toLowerCase().includes(search.toLowerCase()))
@@ -60,9 +78,8 @@ const App = () => {
     const newPerson = {
       name: newName,
       number: newNumber,
-      //id: newName
     }
-    //***//change logic here for next part****
+
     if (persons.map(person => person.name).includes(newName)){ 
       const person = persons.find(person => person.name === newName)
       if (newNumber === person.number){
@@ -73,13 +90,14 @@ const App = () => {
           const changedPerson = {...person, number: newNumber}
           serverCommunication.updatePerson(person.id, changedPerson)
           .then(response => {setPersons(persons.map(p => p.id !== person.id ? p : response))})
-
+          showNotification(`Updated ${person.name}'s number.`)
         }
       }
   }
     else {  
       serverCommunication.createPerson(newPerson)
       .then(data => setPersons(persons.concat(data)))
+      showNotification(`Added ${newName}`)
       setNewName('');
       setNewNumber('');
 }}
@@ -93,6 +111,7 @@ const handleClick = (Person) => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={notification}/>
       <Filter search={search} onChange={changeSearch}/>
       <h2>Add a new: </h2>
       <PersonForm handleSubmit ={handleSubmit} name={newName} nameChange={changeName} 
