@@ -8,3 +8,13 @@
     padding-left: 20px;
     margin-right: 80%;
 }
+.error{
+    color: red;
+    border-style: solid;
+    border-radius: 10px;
+    background: lightgrey;
+    margin-bottom: 10px;
+    font-size: large;
+    padding-left: 20px;
+    margin-right: 80%; 
+}

@@ -1,6 +1,5 @@
 import axios from 'axios';
 const personsUrl = 'http://localhost:3001/persons';
-//add methods to get data, and to create a person
 
 const getPersons = () => {
     let request = axios.get(personsUrl)
@@ -13,11 +12,12 @@ const createPerson = (Person) => {
 }
 
 const removePerson = (id) => {
-    axios.delete(`${personsUrl}/${id}`);
+    let request = axios.delete(`${personsUrl}/${id}`);
+    return request.then(response => response.data)
 }
 
 const updatePerson = (id, updatedPerson) => {
     let request = axios.put(`${personsUrl}/${id}`, updatedPerson)
-    return request.then(response => response.data)
+    return request.then(response => response.data) //this appears to let me catch error in App.js
 }
 export default {getPersons, createPerson, removePerson, updatePerson}

@@ -13,8 +13,15 @@ const Filter = ( {search, onChange}) => {
 
 }
 
-const Notification = ( {message} ) => {
+const Notification = ( {message, error=null} ) => {
   if (message === null) {return null}
+  if (error){
+    return(
+      <div className='error'>
+        {error}
+      </div>
+    )
+  }
   return (
     <div className='notification'>
       {message}
@@ -39,6 +46,7 @@ const App = () => {
   const [ newNumber, setNewNumber] = useState('')
   const [ search, setSearch] = useState('')
   const [notification, setNotification] = useState(null)
+  const [error, setError] = useState(null)
 
   const getData = () => {
     serverCommunication.getPersons()
@@ -90,7 +98,17 @@ const App = () => {
           const changedPerson = {...person, number: newNumber}
           serverCommunication.updatePerson(person.id, changedPerson)
           .then(response => {setPersons(persons.map(p => p.id !== person.id ? p : response))})
-          showNotification(`Updated ${person.name}'s number.`)
+          .catch(e => {
+            setError(`Information of ${person.name} has already been removed from the server.`)
+            setTimeout(() => {
+            setError(null);
+            }, 5000);
+
+          })
+          if (error === null){
+            showNotification(`Updated ${person.name}'s number.`)
+          }
+          getData();
         }
       }
   }
@@ -104,14 +122,20 @@ const App = () => {
 const handleClick = (Person) => {
   const result = window.confirm(`Are you sure you want to delete ${Person.name} ?`);
   if (result) {
-  serverCommunication.removePerson(Person.id);
-  getData()}
-  
+    serverCommunication.removePerson(Person.id)
+    .catch(e => {
+      setError(`Information of ${Person.name} has already been removed from the server.`)
+      setTimeout(() => {
+        setError(null);
+       }, 5000);
+    });
+    showNotification(`Deleted ${Person.name}`)
+    getData()}
 }
   return (
     <div>
       <h2>Phonebook</h2>
-      <Notification message={notification}/>
+      <Notification message={notification} error={error}/>
       <Filter search={search} onChange={changeSearch}/>
       <h2>Add a new: </h2>
       <PersonForm handleSubmit ={handleSubmit} name={newName} nameChange={changeName} 
