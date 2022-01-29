@@ -14,7 +14,7 @@ const Filter = ( {search, onChange}) => {
 }
 
 const Notification = ( {message, error=null} ) => {
-  if (message === null) {return null}
+  if (!message && !error) {return null}
   if (error){
     return(
       <div className='error'>
@@ -98,7 +98,7 @@ const App = () => {
           const changedPerson = {...person, number: newNumber}
           serverCommunication.updatePerson(person.id, changedPerson)
           .then(response => {setPersons(persons.map(p => p.id !== person.id ? p : response))})
-          .catch(e => {
+          .catch(error => {
             setError(`Information of ${person.name} has already been removed from the server.`)
             setTimeout(() => {
             setError(null);
@@ -114,11 +114,20 @@ const App = () => {
   }
     else {  
       serverCommunication.createPerson(newPerson)
-      .then(data => setPersons(persons.concat(data)))
+      .then(data => {
+        setPersons(persons.concat(data))
       showNotification(`Added ${newName}`)
+      })
+      .catch(e => {
+        console.log(e.response.data.error)
+        setError(e.response.data.error)
+        setTimeout(() => {
+          setError(null)}, 10000)
+        })
       setNewName('');
       setNewNumber('');
-}}
+    }
+  }
 const handleClick = (Person) => {
   const result = window.confirm(`Are you sure you want to delete ${Person.name} ?`);
   if (result) {
