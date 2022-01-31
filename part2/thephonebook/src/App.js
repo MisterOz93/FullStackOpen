@@ -97,8 +97,11 @@ const App = () => {
         if (result){ 
           const changedPerson = {...person, number: newNumber}
           serverCommunication.updatePerson(person.id, changedPerson)
-          .then(response => {setPersons(persons.map(p => p.id !== person.id ? p : response))})
-          .then(showNotification(`Updated ${person.name}'s number.`))
+          .then(response => {
+            setPersons(persons.map(p => p.id !== person.id ? p : response),
+            showNotification(`Updated ${person.name}'s number.`)
+            )
+          })
           .catch(e => {
             setError(`${e.response.data.error}`)
             setTimeout(() => {
