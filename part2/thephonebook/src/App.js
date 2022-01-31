@@ -98,16 +98,14 @@ const App = () => {
           const changedPerson = {...person, number: newNumber}
           serverCommunication.updatePerson(person.id, changedPerson)
           .then(response => {setPersons(persons.map(p => p.id !== person.id ? p : response))})
-          .catch(error => {
-            setError(`Information of ${person.name} has already been removed from the server.`)
+          .then(showNotification(`Updated ${person.name}'s number.`))
+          .catch(e => {
+            setError(`${e.response.data.error}`)
             setTimeout(() => {
             setError(null);
             }, 5000);
 
           })
-          if (error === null){
-            showNotification(`Updated ${person.name}'s number.`)
-          }
           getData();
         }
       }
@@ -122,7 +120,7 @@ const App = () => {
         console.log(e.response.data.error)
         setError(e.response.data.error)
         setTimeout(() => {
-          setError(null)}, 10000)
+          setError(null)}, 5000)
         })
       setNewName('');
       setNewNumber('');
