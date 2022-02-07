@@ -24,7 +24,7 @@ const personSchema = new mongoose.Schema({
       validator: function(num) {
         if (num.includes('-')){
           const arr = num.split('-')
-          console.log (arr[0], arr[1])
+          //console.log (arr[0], arr[1])
           return arr[0].length > 1 && arr.length === 2
         }
         return true
