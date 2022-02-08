@@ -6,6 +6,7 @@ const morgan = require('morgan')
 const mongoose = require('mongoose')
 require('dotenv').config()
 const Blog = require('./models/blog')
+const logger = require('./utils/logger')
 
 const mongoUrl = process.env.MONGODB_URI
 mongoose.connect(mongoUrl)
@@ -34,7 +35,7 @@ app.post('/api/blogs', (request, response) => {
 
 const PORT = process.env.PORT
 app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`)
+  logger.info(`Server running on port ${PORT}`)
 })
 
-module.exports = app;
+module.exports = app
