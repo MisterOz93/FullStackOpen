@@ -5,4 +5,4 @@ describe('listHelper', () => {
     const blogs = []
     expect(listHelper.dummy(blogs)).toEqual(1)
   })
-})
+})    
