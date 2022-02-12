@@ -4,7 +4,7 @@ describe('mostBlogs', () => {
   test('returns empty list if no blogs', () => {
     expect(mostBlogs([])).toEqual([])
   }),
-  test('returns the author if given list of one blog', () => {
+  test('returns the author name and 1 if given list of one blog', () => {
     const blog = [
       {
         _id: '5a422a851b54a676234d17f7',
@@ -15,9 +15,9 @@ describe('mostBlogs', () => {
         __v: 0
       }  
     ]
-    expect(mostBlogs(blog)).toEqual('Michael Chan')
+    expect(mostBlogs(blog)).toEqual({author:'Michael Chan', blogs: 1 })
   }),
-  test('returns author of most blogs in list of several blogs', () => {
+  test('returns author of most blogs and number in list of several blogs', () => {
     const blogs = [
       {
         _id: '5a422a851b54a676234d17f7',
@@ -68,6 +68,6 @@ describe('mostBlogs', () => {
         __v: 0
       }  
     ]
-    expect(mostBlogs(blogs)).toEqual('Robert C. Martin')
+    expect(mostBlogs(blogs)).toEqual({author: 'Robert C. Martin', blogs: 3})
   })
 })

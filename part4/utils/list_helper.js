@@ -71,12 +71,16 @@ const favoriteBlog = (blogs) => {
 }
 
 const mostBlogs = (blogs) => { //fix to also return # of blogs
+  if (blogs.length < 1 ){ return []}
   const blogsByAuthor = {}
   const authors = blogs.map(blog => blog.author)
   for (const author of authors) {
     blogsByAuthor[author] = blogsByAuthor[author] ? blogsByAuthor[author] + 1 : 1
   }
-  return blogs.length > 0 ? Object.keys(blogsByAuthor).reduce( (a, b) => blogsByAuthor[a] > blogsByAuthor[b] ? a : b) : []
+  const mostPopular = Object.keys(blogsByAuthor).reduce( (a, b) => blogsByAuthor[a] > blogsByAuthor[b] ? a : b)
+  return {
+    author: mostPopular, 
+    blogs: blogsByAuthor[mostPopular]}
 }
 module.exports = {
   dummy,
