@@ -70,7 +70,7 @@ const favoriteBlog = (blogs) => {
   return favorite ? {title: favorite.title, author: favorite.author, likes: favorite.likes} : []
 }
 
-const mostBlogs = (blogs) => { //fix to also return # of blogs
+const mostBlogs = (blogs) => { 
   if (blogs.length < 1 ){ return []}
   const blogsByAuthor = {}
   const authors = blogs.map(blog => blog.author)
@@ -82,9 +82,24 @@ const mostBlogs = (blogs) => { //fix to also return # of blogs
     author: mostPopular, 
     blogs: blogsByAuthor[mostPopular]}
 }
+
+const mostLikes = (blogs) => {
+  if (blogs.length < 1) return []
+  const likesByAuthor = {}
+  blogs.forEach(blog => {
+    likesByAuthor[blog.author] ? likesByAuthor[blog.author] += blog.likes : likesByAuthor[blog.author] = blog.likes
+  })
+  const mostLiked = Object.keys(likesByAuthor).reduce( (a, b) => likesByAuthor[a] > likesByAuthor[b] ? a : b)
+  return {
+    author: mostLiked,
+    likes: likesByAuthor[mostLiked]
+  }
+}
+
 module.exports = {
   dummy,
   totalLikes,
   favoriteBlog,
   mostBlogs,
+  mostLikes,
 }
