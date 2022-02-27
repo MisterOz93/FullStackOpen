@@ -9,10 +9,10 @@ const api = supertest(app)
 
 beforeEach(async () => {
   await Blog.deleteMany({})
-  let blogObject = new Blog(helper.initialState[0])
-  await blogObject.save()
-  blogObject = new Blog(helper.initialState[1])
-  await blogObject.save()
+  for (let blog of helper.initialState){
+    let blogObject = new Blog(blog)
+    await blogObject.save()
+  }
 })
 
 describe('using GET method', () => {
@@ -57,6 +57,22 @@ test('a new blog can be added', async () => {
   const authors = response.body.map(r => r.author)
   expect(response.body).toHaveLength(helper.initialState.length + 1)
   expect(authors).toContain('Foo McFooson')
+})
+
+test('blog with missing likes dataField gets defaulted to 0', async () => {
+  const blogWithoutLikes = {
+    title: 'How to cope with popularity',
+    author: 'Johnny Kickass',
+    url: 'www.bloggingelite.com',
+  }
+  await api.post('/api/blogs')
+    .send(blogWithoutLikes)
+    .expect(201)
+    .expect('Content-type', /application\/json/)
+
+  const postedBlogs = await helper.blogsInDB()
+  const addedBlog = postedBlogs[postedBlogs.length -1]
+  expect(addedBlog.likes).toEqual(0)
 })
 
 afterAll(() => {
