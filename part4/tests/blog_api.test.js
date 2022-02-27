@@ -13,7 +13,7 @@ beforeEach(async () => {
     let blogObject = new Blog(blog)
     await blogObject.save()
   }
-})
+}, 10000)
 
 describe('using GET method', () => {
   test('blogs are returned as json', async () => {
