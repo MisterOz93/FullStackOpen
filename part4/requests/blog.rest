@@ -4,9 +4,10 @@ POST http://localhost:3003/api/blogs
 Content-Type: application/json
 
 {
- "title": "Every movie that ever existed",
- "author": "Humphrey Bloggart",
-"url" : "www.casablog.ca",
-"likes": 1500000
+ "title": "How to blog",
+ "author": "bloggert",
+"url" : "www.foo.com"
 }
 
+####
+DELETE http://localhost:3003/api/blogs/621daacf925f2446a907de8b
