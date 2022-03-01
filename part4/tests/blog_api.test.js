@@ -85,7 +85,7 @@ describe('using POST method', () => {
       .expect('Content-type', /application\/json/)
     const blogs = await helper.blogsInDB()
     expect(blogs.length).toEqual(helper.initialState.length)
-  })
+  }, 10000)
 })
 
 afterAll(() => {
