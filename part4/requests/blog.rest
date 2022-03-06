@@ -4,8 +4,19 @@ POST http://localhost:3003/api/blogs
 Content-Type: application/json
 
 {
+  "title": "How to blog",
  "author": "bloggert",
 "url" : "www.foo.com"
+}
+####
+PUT http://localhost:3003/api/blogs/62241cf5f6a7f0ff6ec134a8
+Content-Type: application/json
+
+{
+  "title": "How to blog",
+ "author": "bloggert",
+"url" : "www.foo.com",
+"likes" : 1322
 }
 
 ####
