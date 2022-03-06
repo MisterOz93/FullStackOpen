@@ -87,7 +87,19 @@ describe('using POST method', () => {
     expect(blogs.length).toEqual(helper.initialState.length)
   }, 10000)
 })
+describe('Using DELETE method', () => {
+  test.only('Can delete a blog by ID', async () => {
+    const response = await api.get('/api/blogs')
+    const idToDelete = response.body[0].id
+    await api.delete(`/api/blogs/${idToDelete}`)
+    const blogs = await helper.blogsInDB()
+    expect(blogs.length).toEqual(helper.initialState.length - 1)
+    const ids = blogs.map(b => b.id)
+    expect(ids).not.toContain(idToDelete)
 
+
+  })
+})
 afterAll(() => {
   mongoose.connection.close()
 })
