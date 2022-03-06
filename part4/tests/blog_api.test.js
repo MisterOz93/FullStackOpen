@@ -87,8 +87,20 @@ describe('using POST method', () => {
     expect(blogs.length).toEqual(helper.initialState.length)
   }, 10000)
 })
+describe('Using PUT method', () => {
+  test.only('Can update likes', async () => {
+    const blogs = await api.get('/api/blogs')
+    const blogToUpdate = blogs.body[0]
+    blogToUpdate.likes += 100
+    await api.put(`/api/blogs/${blogToUpdate.id}`)
+      .send(blogToUpdate)
+    const blogsAfterUpdate = await api.get('/api/blogs')
+    expect(blogsAfterUpdate.body[0].likes).toEqual(helper.initialState[0].likes + 100)
+
+  })
+})
 describe('Using DELETE method', () => {
-  test.only('Can delete a blog by ID', async () => {
+  test('Can delete a blog by ID', async () => {
     const response = await api.get('/api/blogs')
     const idToDelete = response.body[0].id
     await api.delete(`/api/blogs/${idToDelete}`)
