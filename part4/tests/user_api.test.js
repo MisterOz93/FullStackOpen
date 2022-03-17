@@ -29,5 +29,17 @@ describe('when there is one user in initial state', () => {
       .expect('Content-Type', /application\/json/)
     expect(result.body.error).toContain('username must be unique')
   })
+  test('user with unique username can be created', async () =>{
+    const newUser = {
+      username: 'Fooey',
+      password: 'password'
+    }
+    await api.post('/api/users').send(newUser)
+      .expect(201)
+      .expect('Content-Type', /application\/json/)
+    const updatedDB = await helper.usersInDB()
+    expect(updatedDB.length).toEqual(2)
+})
+
 })
 afterAll(() => mongoose.connection.close())
